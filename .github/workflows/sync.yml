@@ -23,16 +23,16 @@ jobs:
 
       - name: Sync markdown files
         run: |
-          # Remove all existing md files in Astro's pages directory
-          rm -f astro-repo/src/pages/*.md
+          # Remove all existing md files in Astro's content directory
+          rm -f astro-repo/src/content/notes/*.md
 
           # Copy md files from Obsidian (exclude Excalidraw)
           for f in *.md; do
-            [ -f "$f" ] && cp "$f" astro-repo/src/pages/
+            [ -f "$f" ] && cp "$f" astro-repo/src/content/notes/
           done
 
           # Also copy files in subdirectories (excluding Excalidraw)
-          find . -name "*.md" -not -path "./Excalidraw/*" -exec sh -c '[ -f "{}" ] && cp "{}" astro-repo/src/pages/' \;
+          find . -name "*.md" -not -path "./Excalidraw/*" -exec sh -c '[ -f "{}" ] && cp "{}" astro-repo/src/content/notes/' \;
 
       - name: Commit and push to Astro repo
         run: |
