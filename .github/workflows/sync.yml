@@ -19,7 +19,7 @@ jobs:
 
       - name: Clone Astro repo
         env:
-          TARGET_REPO: ShallowDr1Am/dimensional-disk
+          TARGET_REPO: ShallowDr1Am/myPoint
           DEPLOY_TOKEN: ${{ secrets.ASTRO_DEPLOY_TOKEN }}
         run: |
           git clone https://x-access-token:${DEPLOY_TOKEN}@github.com/${TARGET_REPO}.git astro-repo
@@ -45,5 +45,5 @@ jobs:
           else
             git add .
             git commit -m "chore: sync from Obsidian $(date '+%Y-%m-%d %H:%M:%S')"
-            git push https://x-access-token:${DEPLOY_TOKEN}@github.com/ShallowDr1Am/dimensional-disk.git HEAD:main
+            git push https://x-access-token:${DEPLOY_TOKEN}@github.com/ShallowDr1Am/myPoint.git HEAD:main
           fi
