@@ -1,0 +1,49 @@
+name: Sync to Astro
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Obsidian repo
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clone Astro repo
+        env:
+          TARGET_REPO: ShallowDr1Am/dimensional-disk
+          DEPLOY_TOKEN: ${{ secrets.ASTRO_DEPLOY_TOKEN }}
+        run: |
+          git clone https://x-access-token:${DEPLOY_TOKEN}@github.com/${TARGET_REPO}.git astro-repo
+
+      - name: Sync markdown files to Astro
+        run: |
+          # Copy md files (exclude Excalidraw directory)
+          rsync -av --exclude='Excalidraw/' --include='*/' --include='*.md' --exclude='*' . astro-repo/src/pages/
+
+          # Remove deleted files from Astro that no longer exist in Obsidian
+          cd astro-repo/src/pages/
+          for f in *.md; do
+            [ -f "../../../$f" ] || rm -f "$f"
+          done
+
+      - name: Commit and push to Astro repo
+        env:
+          DEPLOY_TOKEN: ${{ secrets.ASTRO_DEPLOY_TOKEN }}
+        run: |
+          cd astro-repo
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to sync"
+          else
+            git add .
+            git commit -m "chore: sync from Obsidian $(date '+%Y-%m-%d %H:%M:%S')"
+            git push https://x-access-token:${DEPLOY_TOKEN}@github.com/ShallowDr1Am/dimensional-disk.git HEAD:main
+          fi
