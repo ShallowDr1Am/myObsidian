@@ -18,32 +18,25 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Clone Astro repo
-        env:
-          TARGET_REPO: ShallowDr1Am/myPoint
-          DEPLOY_TOKEN: ${{ secrets.ASTRO_DEPLOY_TOKEN }}
         run: |
-          git clone https://x-access-token:${DEPLOY_TOKEN}@github.com/${TARGET_REPO}.git astro-repo
+          git clone https://x-access-token:${{ secrets.ASTRO_DEPLOY_TOKEN }}@github.com/ShallowDr1Am/myPoint.git astro-repo
 
-      - name: Sync markdown files to Astro
+      - name: Sync markdown files
         run: |
-          # Copy md files (exclude Excalidraw directory)
-          rsync -av --exclude='Excalidraw/' --include='*/' --include='*.md' --exclude='*' . astro-repo/src/pages/
+          # Remove all existing md files in Astro's pages directory
+          rm -f astro-repo/src/pages/*.md
 
-          # Remove deleted files from Astro that no longer exist in Obsidian
-          cd astro-repo/src/pages/
+          # Copy md files from Obsidian (exclude Excalidraw)
           for f in *.md; do
-            [ -f "../../../$f" ] || rm -f "$f"
+            [ -f "$f" ] && cp "$f" astro-repo/src/pages/
           done
 
+          # Also copy files in subdirectories (excluding Excalidraw)
+          find . -name "*.md" -not -path "./Excalidraw/*" -exec sh -c '[ -f "{}" ] && cp "{}" astro-repo/src/pages/' \;
+
       - name: Commit and push to Astro repo
-        env:
-          DEPLOY_TOKEN: ${{ secrets.ASTRO_DEPLOY_TOKEN }}
         run: |
           cd astro-repo
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "No changes to sync"
-          else
-            git add .
-            git commit -m "chore: sync from Obsidian $(date '+%Y-%m-%d %H:%M:%S')"
-            git push https://x-access-token:${DEPLOY_TOKEN}@github.com/ShallowDr1Am/myPoint.git HEAD:main
-          fi
+          git add .
+          git diff --quiet HEAD || git commit -m "chore: sync from Obsidian $(date '+%Y-%m-%d %H:%M:%S')"
+          git push https://x-access-token:${{ secrets.ASTRO_DEPLOY_TOKEN }}@github.com/ShallowDr1Am/myPoint.git HEAD:main
