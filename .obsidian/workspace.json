@@ -11,14 +11,14 @@
             "id": "027e0c89d6dd3421",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "split-diff-view",
               "state": {
-                "file": "浏览器标签通信.md",
-                "mode": "source",
-                "source": false
+                "aFile": "BFC 块格式化上下文.md",
+                "bFile": "BFC 块格式化上下文.md",
+                "aRef": ""
               },
-              "icon": "lucide-file",
-              "title": "浏览器标签通信"
+              "icon": "diff",
+              "title": "Diff: BFC 块格式化上下文  (Working Tree)"
             }
           }
         ]
@@ -94,7 +94,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "浏览器标签通信.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "浏览器标签通信 的反向链接列表"
+              "title": "反向链接"
             }
           },
           {
@@ -156,13 +155,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "浏览器标签通信.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "浏览器标签通信 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -197,19 +195,41 @@
   },
   "active": "027e0c89d6dd3421",
   "lastOpenFiles": [
-    "test-sync.md",
-    "浏览器标签通信.md",
-    "test-ci.md",
+    "cache-flow.gif",
+    "render-path.gif",
     "BFC 块格式化上下文.md",
+    "render-path.mp4",
+    "跨域.md",
+    "浏览器标签通信.md",
     "文档流.md",
-    "未命名.base",
+    "从输入URL的过程.md",
     "浏览器的进程与线程.md",
-    "Excalidraw/Drawing 2026-04-23 19.47.45.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.49.42.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.49.46.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.50.03.excalidraw.md",
-    "Excalidraw",
+    "事件循环 - long task问题.md",
     "CSS 盒模型.md",
+    "cache-flow.mp4",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/video-only.mp4",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000359.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000358.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000357.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000356.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000355.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000352.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000354.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000353.jpg",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-2",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-1",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-0",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-calibration",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames",
+    "work-1c02999f-1f99-4216-944a-308a145e9790/compiled/index.html",
+    "浏览器进程.md",
+    "Excalidraw/Drawing 2026-04-23 19.47.45.excalidraw.md",
+    "Excalidraw/Drawing 2026-04-23 15.50.03.excalidraw.md",
+    "Excalidraw/Drawing 2026-04-23 15.49.46.excalidraw.md",
+    "Excalidraw/Drawing 2026-04-23 15.49.42.excalidraw.md",
+    "test-sync.md",
+    "test-ci.md",
     "().md",
     "欢迎.md"
   ]
