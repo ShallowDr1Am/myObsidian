@@ -1,0 +1,11 @@
+{
+  "name": "sse-demo",
+  "version": "1.0.0",
+  "description": "SSE 流式文本解析演示",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["sse", "server-sent-events", "streaming"],
+  "license": "MIT"
+}

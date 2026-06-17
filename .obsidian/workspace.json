@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "2ed283a4a0a8a2e0",
+        "id": "90fbb61cf646ebaa",
         "type": "tabs",
         "children": [
           {
-            "id": "027e0c89d6dd3421",
+            "id": "203f529400ba1137",
             "type": "leaf",
             "state": {
-              "type": "split-diff-view",
+              "type": "markdown",
               "state": {
-                "aFile": "BFC 块格式化上下文.md",
-                "bFile": "BFC 块格式化上下文.md",
-                "aRef": ""
+                "file": "browser/SSE 流式文本解析.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "diff",
-              "title": "Diff: BFC 块格式化上下文  (Working Tree)"
+              "icon": "lucide-file",
+              "title": "SSE 流式文本解析"
             }
           }
         ]
@@ -94,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "JS模块化 CommonJs和EsModule.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "反向链接"
+              "title": "JS模块化 CommonJs和EsModule 的反向链接列表"
             }
           },
           {
@@ -155,12 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "JS模块化 CommonJs和EsModule.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "JS模块化 CommonJs和EsModule 的大纲"
             }
           },
           {
@@ -193,44 +195,52 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "027e0c89d6dd3421",
+  "active": "203f529400ba1137",
   "lastOpenFiles": [
-    "cache-flow.gif",
-    "render-path.gif",
-    "BFC 块格式化上下文.md",
-    "render-path.mp4",
-    "跨域.md",
-    "浏览器标签通信.md",
-    "文档流.md",
+    "browser/事件循环 - long task问题.md",
+    "browser/浏览器缓存.md",
+    "browser/浏览器的进程与线程.md",
+    "JS模块化 CommonJs和EsModule.md",
+    "scripts/package-lock.json",
+    "browser/SSE 流式文本解析.md",
+    "demos/sse-demo/server.js",
+    "demos/sse-demo/package.json",
+    "demos/sse-demo/index.html",
+    "demos/sse-demo/client.js",
+    "demos/sse-demo/README.md",
+    "demos/sse-demo",
+    "demos/browser-cache-video/browser-cache.mp4",
+    "demos/browser-cache-video/index.html",
+    "demos/browser-cache-video",
+    "demos/browser-cache-frames/frame_08_summary.png",
+    "demos/browser-cache-frames/frame_07_cdn.png",
+    "demos/browser-cache-frames/frame_06_strategy.png",
+    "demos/browser-cache-frames/frame_05_user.png",
+    "demos/browser-cache-frames/frame_04_storage.png",
+    "demos/browser-cache-frames/frame_03_compare.png",
+    "demos/browser-cache-frames/frame_02_flow.png",
+    "demos/browser-cache-frames/frame_01_title.png",
+    "demos/browser-cache-frames",
+    "browser/从输入URL的过程.md",
+    "browser/跨域.md",
+    "browser/浏览器标签通信.md",
+    "javascript/变量定义与函数去差异.md",
+    "javascript/Set、Map以及.map和.foreach.md",
+    "javascript/JS模块化 CommonJs和EsModule.md",
+    "javascript/Generator Async.md",
+    "css/文档流.md",
+    "css/CSS 盒模型.md",
+    "css/BFC 块格式化上下文.md",
+    "变量定义与函数去差异.md",
+    "Set、Map以及.map和.foreach.md",
+    "SSE 流式文本解析.md",
+    "Generator Async.md",
+    "浏览器缓存.md",
     "从输入URL的过程.md",
+    "浏览器标签通信.md",
     "浏览器的进程与线程.md",
     "事件循环 - long task问题.md",
-    "CSS 盒模型.md",
-    "cache-flow.mp4",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/video-only.mp4",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000359.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000358.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000357.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000356.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000355.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000352.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000354.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames/frame_000353.jpg",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-2",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-1",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0/worker-0",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-attempt-0",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/capture-calibration",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/captured-frames",
-    "work-1c02999f-1f99-4216-944a-308a145e9790/compiled/index.html",
-    "浏览器进程.md",
-    "Excalidraw/Drawing 2026-04-23 19.47.45.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.50.03.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.49.46.excalidraw.md",
-    "Excalidraw/Drawing 2026-04-23 15.49.42.excalidraw.md",
-    "test-sync.md",
-    "test-ci.md",
-    "().md",
-    "欢迎.md"
+    "browser-cache-frames/frame_08_summary.png",
+    "browser-cache-frames/frame_05_user.png"
   ]
 }

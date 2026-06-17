@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #0D1B2A;
+      font-family: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .scene {
+      position: absolute;
+      top: 0; left: 0;
+      width: 1920px; height: 1080px;
+      overflow: hidden;
+    }
+    /* ===== Scene 1: Title ===== */
+    #scene1 { z-index: 1; background: #0D1B2A; }
+    .s1-grid-line {
+      position: absolute;
+      height: 2px;
+      background: rgba(65, 90, 119, 0.15);
+    }
+    .s1-glow {
+      position: absolute;
+      width: 800px; height: 800px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,102,255,0.08) 0%, rgba(0,102,255,0) 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .s1-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      padding: 120px 160px;
+    }
+    .s1-title {
+      font-family: "Space Grotesk", "PingFang SC", sans-serif;
+      font-size: 100px;
+      font-weight: 700;
+      color: #E0E1DD;
+      letter-spacing: -0.03em;
+    }
+    .s1-divider {
+      width: 200px; height: 3px;
+      background: #0066FF;
+      transform: scaleX(0);
+      transform-origin: center;
+    }
+    .s1-subtitle {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 22px;
+      font-weight: 500;
+      color: #8FA3B8;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ===== Scene 2: Cache Lookup Flow ===== */
+    #scene2 { z-index: 2; background: #0D1B2A; opacity: 0; }
+    .s2-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,102,255,0.06) 0%, rgba(0,102,255,0) 70%);
+      bottom: -100px; right: -100px;
+    }
+    .s2-pattern {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(65,90,119,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(65,90,119,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .s2-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 100px;
+      gap: 40px;
+    }
+    .s2-header {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s2-flow {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .flow-node {
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 6px;
+      padding: 20px 28px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #E0E1DD;
+      text-align: center;
+      min-width: 140px;
+    }
+    .flow-node.decision {
+      border-color: #0066FF;
+      background: rgba(0,102,255,0.1);
+    }
+    .flow-arrow {
+      width: 50px;
+      height: 3px;
+      background: #8FA3B8;
+      position: relative;
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+    .flow-arrow::after {
+      content: "";
+      position: absolute;
+      right: -6px; top: -5px;
+      border: 7px solid transparent;
+      border-left-color: #8FA3B8;
+    }
+    .s2-branches {
+      display: flex;
+      gap: 60px;
+      margin-top: 40px;
+    }
+    .branch-card {
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 8px;
+      padding: 28px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .branch-card.hit { border-color: #4CAF50; }
+    .branch-card.negotiated { border-color: #FFC300; }
+    .branch-card.miss { border-color: #0066FF; }
+    .branch-label {
+      font-family: "IBM Plex Sans", sans-serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #8FA3B8;
+    }
+    .branch-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .branch-badge {
+      display: inline-block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 22px;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+    .badge-200 { background: rgba(76,175,80,0.2); color: #4CAF50; }
+    .badge-304 { background: rgba(255,195,0,0.2); color: #FFC300; }
+    .badge-200new { background: rgba(77,148,255,0.2); color: #4d94ff; }
+    .branch-desc {
+      font-size: 18px;
+      font-weight: 300;
+      color: #8FA3B8;
+      margin-top: 4px;
+    }
+
+    /* ===== Scene 3: Strong vs Negotiated ===== */
+    #scene3 { z-index: 3; background: #0D1B2A; opacity: 0; }
+    .s3-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      padding: 80px 80px;
+      gap: 0;
+    }
+    .s3-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 0 40px;
+    }
+    .s3-divider-line {
+      width: 2px;
+      background: #8FA3B8;
+      transform: scaleY(0);
+      transform-origin: top center;
+      margin: 0 20px;
+      align-self: stretch;
+    }
+    .s3-vs {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #8FA3B8;
+      z-index: 5;
+    }
+    .s3-panel-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #E0E1DD;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #8FA3B8;
+    }
+    .s3-card {
+      background: #1B263B;
+      border-radius: 6px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .s3-card-header {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 22px;
+      font-weight: 500;
+      color: #4d94ff;
+    }
+    .s3-card-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .s3-tag {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 18px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 4px;
+      background: rgba(0,102,255,0.1);
+      color: #E0E1DD;
+    }
+    .s3-deprecated {
+      text-decoration: line-through;
+      opacity: 0.4;
+    }
+    .s3-priority-badge {
+      background: rgba(255,195,0,0.15);
+      border: 2px solid #FFC300;
+      border-radius: 6px;
+      padding: 12px 20px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #FFC300;
+      text-align: center;
+    }
+    .s3-note {
+      font-size: 16px;
+      color: #8FA3B8;
+      font-weight: 300;
+    }
+
+    /* ===== Scene 4: Cache Storage Stack ===== */
+    #scene4 { z-index: 4; background: #0D1B2A; opacity: 0; }
+    .s4-bg-gradient {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to bottom, rgba(27,38,59,0.3) 0%, rgba(13,27,42,0) 100%);
+    }
+    .s4-columns {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: linear-gradient(90deg, rgba(65,90,119,0.04) 1px, transparent 1px);
+      background-size: 120px 120px;
+    }
+    .s4-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 160px;
+      gap: 32px;
+    }
+    .s4-header {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s4-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .stack-card {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 6px;
+      padding: 24px 32px;
+    }
+    .stack-card.top {
+      border-color: #0066FF;
+      background: rgba(0,102,255,0.08);
+    }
+    .stack-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #8FA3B8;
+      min-width: 60px;
+    }
+    .stack-card.top .stack-num { color: #4d94ff; }
+    .stack-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .stack-name {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .stack-desc {
+      font-size: 18px;
+      font-weight: 300;
+      color: #8FA3B8;
+      max-width: 800px;
+    }
+    .s4-arrow-label {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 16px;
+      color: #8FA3B8;
+      text-align: center;
+      margin-top: 24px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== Scene 5: User Behavior ===== */
+    #scene5 { z-index: 5; background: #0D1B2A; opacity: 0; }
+    .s5-scanline {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: rgba(0,102,255,0.1);
+    }
+    .s5-accent-stripe {
+      position: absolute;
+      left: 0; top: 0;
+      width: 4px; height: 100%;
+      background: #0066FF;
+      opacity: 0.3;
+    }
+    .s5-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 120px;
+      gap: 32px;
+    }
+    .s5-header {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s5-cards {
+      display: flex;
+      gap: 32px;
+      margin-top: 16px;
+    }
+    .s5-card {
+      flex: 1;
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 8px;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .s5-card-action {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 16px;
+      font-weight: 500;
+      color: #4d94ff;
+      letter-spacing: 0.05em;
+    }
+    .s5-card-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s5-card-flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .s5-flow-item {
+      font-size: 18px;
+      font-weight: 400;
+      color: #E0E1DD;
+      padding: 6px 14px;
+      border-radius: 4px;
+      background: rgba(65,90,119,0.2);
+    }
+    .s5-flow-arrow {
+      color: #8FA3B8;
+      font-size: 20px;
+    }
+    .s5-kbd {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 2px solid #8FA3B8;
+      background: rgba(65,90,119,0.15);
+      color: #E0E1DD;
+    }
+
+    /* ===== Scene 6: Practical Strategy ===== */
+    #scene6 { z-index: 6; background: #0D1B2A; opacity: 0; }
+    .s6-dots {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(circle, rgba(65,90,119,0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .s6-glow {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,102,255,0.06) 0%, rgba(0,102,255,0) 70%);
+      top: -100px; left: -100px;
+    }
+    .s6-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 80px 120px;
+      gap: 32px;
+    }
+    .s6-header {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s6-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .s6-card {
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 8px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .s6-card-type {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: #4d94ff;
+      letter-spacing: 0.05em;
+    }
+    .s6-card-name {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s6-card-code {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 20px;
+      font-weight: 500;
+      color: #4CAF50;
+      padding: 10px 16px;
+      background: rgba(76,175,80,0.08);
+      border-radius: 4px;
+      border: 1px solid rgba(76,175,80,0.2);
+    }
+    .s6-card-note {
+      font-size: 16px;
+      font-weight: 300;
+      color: #8FA3B8;
+    }
+
+    /* ===== Scene 7: CDN Cache ===== */
+    #scene7 { z-index: 7; background: #0D1B2A; opacity: 0; }
+    .s7-grid {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(65,90,119,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(65,90,119,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .s7-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 100px;
+      gap: 20px;
+    }
+    .s7-header {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s7-flow-container {
+      display: flex;
+      gap: 40px;
+      margin-top: 10px;
+    }
+    .s7-flow-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .s7-flow-title {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 16px;
+      font-weight: 500;
+      color: #8FA3B8;
+      letter-spacing: 0.05em;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #8FA3B8;
+    }
+    .s7-flow-title.hit { border-color: #4CAF50; color: #4CAF50; }
+    .s7-flow-title.miss { border-color: #FFC300; color: #FFC300; }
+    .s7-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .s7-step-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #8FA3B8;
+      min-width: 40px;
+    }
+    .s7-step-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .s7-step-action {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4d94ff;
+    }
+    .s7-step-desc {
+      font-size: 18px;
+      font-weight: 600;
+      color: #E0E1DD;
+    }
+    .s7-step-detail {
+      font-size: 14px;
+      color: #8FA3B8;
+    }
+    .s7-result-box {
+      background: rgba(76,175,80,0.1);
+      border: 2px solid #4CAF50;
+      border-radius: 8px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .s7-result-box.miss {
+      background: rgba(255,195,0,0.1);
+      border-color: #FFC300;
+    }
+    .s7-result-badge {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: #4CAF50;
+    }
+    .s7-result-box.miss .s7-result-badge { color: #FFC300; }
+    .s7-result-text {
+      font-size: 16px;
+      color: #E0E1DD;
+    }
+    .s7-features {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .s7-feature {
+      flex: 1;
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 6px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .s7-feature-icon {
+      font-size: 24px;
+    }
+    .s7-feature-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #E0E1DD;
+    }
+    .s7-feature-desc {
+      font-size: 14px;
+      color: #8FA3B8;
+    }
+
+    /* ===== Scene 8: Summary ===== */
+    #scene8 { z-index: 8; background: #0D1B2A; opacity: 0; }
+    .s8-glow {
+      position: absolute;
+      width: 900px; height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,102,255,0.1) 0%, rgba(0,102,255,0) 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .s8-grain {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .s8-content {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 160px;
+      gap: 40px;
+    }
+    .s8-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 1200px;
+    }
+    .s8-tile {
+      background: #1B263B;
+      border: 2px solid #8FA3B8;
+      border-radius: 8px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .s8-tile-badge {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 32px;
+      font-weight: 700;
+    }
+    .s8-tile-text {
+      font-size: 22px;
+      font-weight: 600;
+      color: #E0E1DD;
+    }
+    .s8-closing {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #4d94ff;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-start="0" data-duration="50">
+
+    <!-- ===== SCENE 1: Title ===== -->
+    <div id="scene1" class="scene">
+      <div class="s1-glow" id="s1-glow"></div>
+      <div class="s1-grid-line" style="top:200px;left:0;width:1920px;"></div>
+      <div class="s1-grid-line" style="top:440px;left:0;width:1920px;"></div>
+      <div class="s1-grid-line" style="top:680px;left:0;width:1920px;"></div>
+      <div class="s1-grid-line" style="top:920px;left:0;width:1920px;"></div>
+      <div class="s1-content">
+        <div class="s1-title" id="s1-title">浏览器缓存机制</div>
+        <div class="s1-divider" id="s1-divider"></div>
+        <div class="s1-subtitle" id="s1-subtitle">Browser Caching Mechanism</div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 2: Cache Lookup Flow ===== -->
+    <div id="scene2" class="scene">
+      <div class="s2-pattern"></div>
+      <div class="s2-glow"></div>
+      <div class="s2-content">
+        <div class="s2-header" id="s2-header">缓存查找流程</div>
+        <div class="s2-flow" id="s2-flow">
+          <div class="flow-node" id="fn-request">浏览器请求</div>
+          <div class="flow-arrow" id="fa-1"></div>
+          <div class="flow-node decision" id="fn-strong">强缓存?</div>
+          <div class="flow-arrow" id="fa-2"></div>
+          <div class="flow-node decision" id="fn-negotiate">协商缓存?</div>
+          <div class="flow-arrow" id="fa-3"></div>
+          <div class="flow-node" id="fn-server">服务器</div>
+        </div>
+        <div class="s2-branches" id="s2-branches">
+          <div class="branch-card hit" id="bc-1">
+            <div class="branch-label">强缓存命中</div>
+            <div class="branch-title">直接使用本地缓存</div>
+            <span class="branch-badge badge-200">200 from cache</span>
+            <div class="branch-desc">不发送请求到服务器</div>
+          </div>
+          <div class="branch-card negotiated" id="bc-2">
+            <div class="branch-label">协商缓存命中</div>
+            <div class="branch-title">服务器验证资源未变</div>
+            <span class="branch-badge badge-304">304 Not Modified</span>
+            <div class="branch-desc">从本地缓存读取</div>
+          </div>
+          <div class="branch-card miss" id="bc-3">
+            <div class="branch-label">缓存失效</div>
+            <div class="branch-title">服务器返回新资源</div>
+            <span class="branch-badge badge-200new">200 新资源</span>
+            <div class="branch-desc">并存入浏览器缓存</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 3: Strong vs Negotiated ===== -->
+    <div id="scene3" class="scene">
+      <div class="s3-content">
+        <div class="s3-panel" id="s3-left">
+          <div class="s3-panel-title">强缓存</div>
+          <div class="s3-card" id="s3-cc-card">
+            <div class="s3-card-header">Cache-Control</div>
+            <div class="s3-card-items">
+              <span class="s3-tag">max-age</span>
+              <span class="s3-tag">no-cache</span>
+              <span class="s3-tag">no-store</span>
+              <span class="s3-tag">public</span>
+              <span class="s3-tag">private</span>
+              <span class="s3-tag">must-revalidate</span>
+            </div>
+          </div>
+          <div class="s3-card" id="s3-exp-card">
+            <div class="s3-card-header s3-deprecated">Expires</div>
+            <div class="s3-note">HTTP/1.0 产物，受限于本地时间</div>
+            <div class="s3-note">Cache-Control 优先级更高</div>
+          </div>
+          <div class="s3-card" id="s3-cc-note">
+            <div class="s3-note">no-cache ≠ 不缓存，而是跳过强缓存直接进入协商验证</div>
+          </div>
+        </div>
+        <div class="s3-divider-line" id="s3-divider"></div>
+        <div class="s3-panel" id="s3-right">
+          <div class="s3-panel-title">协商缓存</div>
+          <div class="s3-card" id="s3-lm-card">
+            <div class="s3-card-header">Last-Modified / If-Modified-Since</div>
+            <div class="s3-note">基于修改时间，精度仅秒级</div>
+            <div class="s3-note">文件未改但打开也可能改变 Last-Modified</div>
+          </div>
+          <div class="s3-card" id="s3-etag-card">
+            <div class="s3-card-header">ETag / If-None-Match</div>
+            <div class="s3-note">基于资源唯一标识，精度更高</div>
+            <div class="s3-note">计算成本较大，集群场景可能不一致</div>
+          </div>
+          <div class="s3-priority-badge" id="s3-priority">ETag 优先级更高</div>
+        </div>
+      </div>
+      <div class="s3-vs" id="s3-vs">VS</div>
+    </div>
+
+    <!-- ===== SCENE 4: Cache Storage Stack ===== -->
+    <div id="scene4" class="scene">
+      <div class="s4-bg-gradient"></div>
+      <div class="s4-columns"></div>
+      <div class="s4-content">
+        <div class="s4-header" id="s4-header">缓存存储位置</div>
+        <div class="s4-stack" id="s4-stack">
+          <div class="stack-card top" id="sc-1">
+            <div class="stack-num">01</div>
+            <div class="stack-info">
+              <div class="stack-name">Service Worker</div>
+              <div class="stack-desc">独立线程，可编程控制缓存策略，拦截请求</div>
+            </div>
+          </div>
+          <div class="stack-card" id="sc-2">
+            <div class="stack-num">02</div>
+            <div class="stack-info">
+              <div class="stack-name">Memory Cache</div>
+              <div class="stack-desc">内存缓存，读取快但不关心 Cache-Control，匹配时校验 Content-Type/CORS</div>
+            </div>
+          </div>
+          <div class="stack-card" id="sc-3">
+            <div class="stack-num">03</div>
+            <div class="stack-info">
+              <div class="stack-name">Disk Cache</div>
+              <div class="stack-desc">硬盘缓存，根据 HTTP Header 判断资源是否缓存，容量大</div>
+            </div>
+          </div>
+          <div class="stack-card" id="sc-4">
+            <div class="stack-num">04</div>
+            <div class="stack-info">
+              <div class="stack-name">Push Cache</div>
+              <div class="stack-desc">HTTP/2 推送缓存，连接关闭即释放，只能使用一次</div>
+            </div>
+          </div>
+        </div>
+        <div class="s4-arrow-label" id="s4-arrow">优先级从高到低 ▼</div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 5: User Behavior ===== -->
+    <div id="scene5" class="scene">
+      <div class="s5-scanline" id="s5-scanline"></div>
+      <div class="s5-accent-stripe"></div>
+      <div class="s5-content">
+        <div class="s5-header" id="s5-header">用户行为对缓存的影响</div>
+        <div class="s5-cards" id="s5-cards">
+          <div class="s5-card" id="s5c-1">
+            <div class="s5-card-action">地址栏输入</div>
+            <div class="s5-card-title">查找 Disk Cache</div>
+            <div class="s5-card-flow">
+              <span class="s5-flow-item">disk cache</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">命中则使用</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">否则请求服务器</span>
+            </div>
+          </div>
+          <div class="s5-card" id="s5c-2">
+            <div class="s5-card-action">普通刷新 <span class="s5-kbd">F5</span></div>
+            <div class="s5-card-title">优先 Memory Cache</div>
+            <div class="s5-card-flow">
+              <span class="s5-flow-item">memory cache</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">disk cache</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">否则请求服务器</span>
+            </div>
+          </div>
+          <div class="s5-card" id="s5c-3">
+            <div class="s5-card-action">强制刷新 <span class="s5-kbd">Ctrl+F5</span></div>
+            <div class="s5-card-title">跳过所有缓存</div>
+            <div class="s5-card-flow">
+              <span class="s5-flow-item" style="border-color:#E71D36;border:1px solid rgba(231,29,54,0.3);background:rgba(231,29,54,0.1);">no-cache</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">直接请求服务器</span>
+              <span class="s5-flow-arrow">→</span>
+              <span class="s5-flow-item">200 + 最新内容</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 6: Practical Strategy ===== -->
+    <div id="scene6" class="scene">
+      <div class="s6-dots"></div>
+      <div class="s6-glow"></div>
+      <div class="s6-content">
+        <div class="s6-header" id="s6-header">缓存策略：按文件类型配置</div>
+        <div class="s6-grid" id="s6-grid">
+          <div class="s6-card" id="s6c-1">
+            <div class="s6-card-type">HTML</div>
+            <div class="s6-card-name">主文件 — 协商缓存</div>
+            <div class="s6-card-code">Cache-Control: no-cache</div>
+            <div class="s6-card-note">保证改变能及时更新</div>
+          </div>
+          <div class="s6-card" id="s6c-2">
+            <div class="s6-card-type">Images</div>
+            <div class="s6-card-name">图片 — 短期强缓存</div>
+            <div class="s6-card-code">Cache-Control: max-age=86400</div>
+            <div class="s6-card-note">1天过期，替换为主</div>
+          </div>
+          <div class="s6-card" id="s6c-3">
+            <div class="s6-card-type">CSS</div>
+            <div class="s6-card-name">样式 — 长缓存 + 指纹</div>
+            <div class="s6-card-code">filename.[hash].css</div>
+            <div class="s6-card-note">max-age=31536000 + 文件名哈希</div>
+          </div>
+          <div class="s6-card" id="s6c-4">
+            <div class="s6-card-type">JavaScript</div>
+            <div class="s6-card-name">脚本 — 类似CSS策略</div>
+            <div class="s6-card-code">Cache-Control: private, max-age=31536000</div>
+            <div class="s6-card-note">含隐私信息时添加 private</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 7: CDN Cache ===== -->
+    <div id="scene7" class="scene">
+      <div class="s7-grid"></div>
+      <div class="s7-content">
+        <div class="s7-header" id="s7-header">CDN 缓存工作原理</div>
+
+        <div class="s7-flow-container" id="s7-flows">
+          <!-- 命中缓存流程 -->
+          <div class="s7-flow-column" id="s7-flow-hit">
+            <div class="s7-flow-title hit">缓存命中</div>
+            <div class="s7-step" id="s7h-s1">
+              <div class="s7-step-num">1</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">用户请求</div>
+                <div class="s7-step-desc">访问静态资源 URL</div>
+              </div>
+            </div>
+            <div class="s7-step" id="s7h-s2">
+              <div class="s7-step-num">2</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">DNS 解析</div>
+                <div class="s7-step-desc">返回就近 CDN 节点 IP</div>
+                <div class="s7-step-detail">基于地理位置、网络状况</div>
+              </div>
+            </div>
+            <div class="s7-step" id="s7h-s3">
+              <div class="s7-step-num">3</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">CDN 命中</div>
+                <div class="s7-step-desc">边缘节点直接返回资源</div>
+              </div>
+            </div>
+            <div class="s7-result-box" id="s7h-result">
+              <div class="s7-result-badge">200 OK</div>
+              <div class="s7-result-text">就近响应，延迟最低</div>
+            </div>
+          </div>
+
+          <!-- 未命中回源流程 -->
+          <div class="s7-flow-column" id="s7-flow-miss">
+            <div class="s7-flow-title miss">缓存未命中</div>
+            <div class="s7-step" id="s7m-s1">
+              <div class="s7-step-num">1</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">CDN 未命中</div>
+                <div class="s7-step-desc">边缘节点无缓存</div>
+              </div>
+            </div>
+            <div class="s7-step" id="s7m-s2">
+              <div class="s7-step-num">2</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">回源请求</div>
+                <div class="s7-step-desc">向源站服务器请求资源</div>
+                <div class="s7-step-detail">逐级向上查询直至根服务器</div>
+              </div>
+            </div>
+            <div class="s7-step" id="s7m-s3">
+              <div class="s7-step-num">3</div>
+              <div class="s7-step-content">
+                <div class="s7-step-action">缓存 + 响应</div>
+                <div class="s7-step-desc">CDN 缓存资源并返回用户</div>
+              </div>
+            </div>
+            <div class="s7-result-box miss" id="s7m-result">
+              <div class="s7-result-badge">首次较慢</div>
+              <div class="s7-result-text">后续请求将命中缓存</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s7-features" id="s7-features">
+          <div class="s7-feature" id="s7f-1">
+            <div class="s7-feature-title">静态资源边缘化</div>
+            <div class="s7-feature-desc">将静态资源部署到边缘节点</div>
+          </div>
+          <div class="s7-feature" id="s7f-2">
+            <div class="s7-feature-title">域名分片</div>
+            <div class="s7-feature-desc">突破同域名 6 并发限制</div>
+          </div>
+          <div class="s7-feature" id="s7f-3">
+            <div class="s7-feature-title">多级缓存</div>
+            <div class="s7-feature-desc">边缘 → 区域 → 中心 → 源站</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCENE 8: Summary ===== -->
+    <div id="scene8" class="scene">
+      <div class="s8-glow" id="s8-glow"></div>
+      <div class="s8-grain"></div>
+      <div class="s8-content">
+        <div class="s8-grid" id="s8-grid">
+          <div class="s8-tile" id="s8t-1">
+            <div class="s8-tile-badge" style="color:#4CAF50;">200</div>
+            <div class="s8-tile-text">强缓存优先</div>
+          </div>
+          <div class="s8-tile" id="s8t-2">
+            <div class="s8-tile-badge" style="color:#FFC300;">304</div>
+            <div class="s8-tile-text">协商缓存验证</div>
+          </div>
+          <div class="s8-tile" id="s8t-3">
+            <div class="s8-tile-badge" style="color:#4d94ff;">4级</div>
+            <div class="s8-tile-text">缓存存储位置</div>
+          </div>
+          <div class="s8-tile" id="s8t-4">
+            <div class="s8-tile-badge" style="color:#E0E1DD;">按类型</div>
+            <div class="s8-tile-text">分策略配置</div>
+          </div>
+        </div>
+        <div class="s8-closing" id="s8-closing">缓存 = 速度 + 效率</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    // ===== SCENE 1: Title (0-5s) =====
+    // Grid lines draw in
+    tl.fromTo(".s1-grid-line", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.out", stagger: 0.1 }, 0.1);
+    // Glow breath
+    tl.to("#s1-glow", { scale: 1.08, yoyo: true, repeat: 3, duration: 1.2, ease: "sine.inOut" }, 0);
+    // Title SLAMS
+    tl.fromTo("#s1-title", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "expo.out" }, 0.3);
+    // Divider expands
+    tl.fromTo("#s1-divider", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.7);
+    // Subtitle floats
+    tl.fromTo("#s1-subtitle", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.inOut" }, 0.9);
+
+    // ===== TRANSITION 1→2: Blur crossfade at T=5 =====
+    var T1 = 5;
+    tl.to("#scene1", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, T1);
+    tl.fromTo("#scene2", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }, T1 + 0.1);
+
+    // ===== SCENE 2: Cache Lookup Flow (5-13s) =====
+    var s2 = T1 + 0.6;
+    // Header
+    tl.fromTo("#s2-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s2);
+    // Flow nodes cascade
+    tl.fromTo("#fn-request", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, s2 + 0.2);
+    tl.fromTo("#fa-1", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, s2 + 0.5);
+    tl.fromTo("#fn-strong", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.4)" }, s2 + 0.7);
+    tl.fromTo("#fa-2", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, s2 + 1.0);
+    tl.fromTo("#fn-negotiate", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.4)" }, s2 + 1.2);
+    tl.fromTo("#fa-3", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, s2 + 1.5);
+    tl.fromTo("#fn-server", { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, s2 + 1.7);
+    // Branch cards cascade
+    tl.fromTo("#bc-1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s2 + 2.1);
+    tl.fromTo("#bc-2", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s2 + 2.3);
+    tl.fromTo("#bc-3", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.out" }, s2 + 2.5);
+    // Badges pop
+    tl.fromTo(".branch-badge", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)", stagger: 0.1 }, s2 + 2.8);
+
+    // ===== TRANSITION 2→3: Push slide at T=13 =====
+    var T2 = 13;
+    tl.to("#scene2", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T2);
+    tl.fromTo("#scene3", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T2);
+
+    // ===== SCENE 3: Strong vs Negotiated (13-21s) =====
+    var s3 = T2 + 0.5;
+    // Divider draws down
+    tl.fromTo("#s3-divider", { scaleY: 0 }, { scaleY: 1, duration: 0.6, ease: "power2.out" }, s3);
+    // VS badge
+    tl.fromTo("#s3-vs", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, s3 + 0.2);
+    // Left panel cascades
+    tl.fromTo("#s3-left .s3-panel-title", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s3 + 0.3);
+    tl.fromTo("#s3-cc-card", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s3 + 0.5);
+    tl.fromTo("#s3-exp-card", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "sine.out" }, s3 + 0.65);
+    tl.fromTo("#s3-cc-note", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, s3 + 0.8);
+    // Right panel cascades
+    tl.fromTo("#s3-right .s3-panel-title", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s3 + 0.6);
+    tl.fromTo("#s3-lm-card", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s3 + 0.8);
+    tl.fromTo("#s3-etag-card", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "sine.out" }, s3 + 0.95);
+    // Priority badge SLAMS
+    tl.fromTo("#s3-priority", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2)" }, s3 + 1.2);
+    // Tags stagger
+    tl.fromTo(".s3-tag", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.25, ease: "back.out(1.4)", stagger: 0.06 }, s3 + 0.7);
+
+    // ===== TRANSITION 3→4: Blur crossfade at T=21 =====
+    var T3 = 21;
+    tl.to("#scene3", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, T3);
+    tl.fromTo("#scene4", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }, T3 + 0.1);
+
+    // ===== SCENE 4: Cache Storage Stack (21-27s) =====
+    var s4 = T3 + 0.6;
+    tl.fromTo("#s4-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s4);
+    // Cards rise from bottom
+    tl.fromTo("#sc-1", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s4 + 0.3);
+    tl.fromTo("#sc-2", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s4 + 0.55);
+    tl.fromTo("#sc-3", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.out" }, s4 + 0.8);
+    tl.fromTo("#sc-4", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, s4 + 1.05);
+    // Arrow label
+    tl.fromTo("#s4-arrow", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power2.out" }, s4 + 1.3);
+    // Service Worker glow pulse
+    tl.to("#sc-1", { boxShadow: "0 0 30px rgba(0,102,255,0.2)", duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 2 }, s4 + 1.0);
+
+    // ===== TRANSITION 4→5: Push slide at T=27 =====
+    var T4 = 27;
+    tl.to("#scene4", { x: -1920, duration: 0.5, ease: "power3.inOut" }, T4);
+    tl.fromTo("#scene5", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, T4);
+
+    // ===== SCENE 5: User Behavior (27-33s) =====
+    var s5 = T4 + 0.5;
+    tl.fromTo("#s5-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s5);
+    // Cards slide from right
+    tl.fromTo("#s5c-1", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s5 + 0.3);
+    tl.fromTo("#s5c-2", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s5 + 0.55);
+    tl.fromTo("#s5c-3", { x: 80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }, s5 + 0.8);
+    // Keyboard badges pop
+    tl.fromTo(".s5-kbd", { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)", stagger: 0.1 }, s5 + 1.0);
+    // Flow items stagger
+    tl.fromTo(".s5-flow-item", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out", stagger: 0.05 }, s5 + 1.2);
+    // Scanline drift
+    tl.to("#s5-scanline", { y: 1080, duration: 4, ease: "none" }, T4 + 0.5);
+
+    // ===== TRANSITION 5→6: Blur crossfade at T=33 =====
+    var T5 = 33;
+    tl.to("#scene5", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, T5);
+    tl.fromTo("#scene6", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }, T5 + 0.1);
+
+    // ===== SCENE 6: Practical Strategy (33-39s) =====
+    var s6 = T5 + 0.6;
+    tl.fromTo("#s6-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s6);
+    // Cards cascade diagonal
+    tl.fromTo("#s6c-1", { x: -30, y: 30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s6 + 0.3);
+    tl.fromTo("#s6c-2", { x: 30, y: 30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, s6 + 0.5);
+    tl.fromTo("#s6c-3", { x: -30, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.5, ease: "sine.out" }, s6 + 0.7);
+    tl.fromTo("#s6c-4", { x: 30, y: -30, opacity: 0 }, { x: 0, y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.4)" }, s6 + 0.9);
+    // Code values type on
+    tl.fromTo(".s6-card-code", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.6, ease: "power2.out", stagger: 0.15 }, s6 + 0.8);
+
+    // ===== TRANSITION 6→7: Blur crossfade at T=39 =====
+    var T6 = 39;
+    tl.to("#scene6", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, T6);
+    tl.fromTo("#scene7", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }, T6 + 0.1);
+
+    // ===== SCENE 7: CDN Cache (39-45s) =====
+    var s7 = T6 + 0.6;
+    tl.fromTo("#s7-header", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, s7);
+    // Flow titles
+    tl.fromTo("#s7-flow-hit .s7-flow-title", { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, s7 + 0.2);
+    tl.fromTo("#s7-flow-miss .s7-flow-title", { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4, ease: "expo.out" }, s7 + 0.3);
+    // Hit flow steps cascade
+    tl.fromTo("#s7h-s1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, s7 + 0.5);
+    tl.fromTo("#s7h-s2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, s7 + 0.7);
+    tl.fromTo("#s7h-s3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, s7 + 0.9);
+    // Miss flow steps cascade
+    tl.fromTo("#s7m-s1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "sine.out" }, s7 + 0.6);
+    tl.fromTo("#s7m-s2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "sine.out" }, s7 + 0.8);
+    tl.fromTo("#s7m-s3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "sine.out" }, s7 + 1.0);
+    // Result boxes
+    tl.fromTo("#s7h-result", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.6)" }, s7 + 1.3);
+    tl.fromTo("#s7m-result", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.4)" }, s7 + 1.5);
+    // Features row
+    tl.fromTo("#s7f-1", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, s7 + 1.8);
+    tl.fromTo("#s7f-2", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, s7 + 2.0);
+    tl.fromTo("#s7f-3", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, s7 + 2.2);
+
+    // ===== TRANSITION 7→8: Blur crossfade at T=45 =====
+    var T7 = 45;
+    tl.to("#scene7", { filter: "blur(10px)", scale: 1.03, opacity: 0, duration: 0.5, ease: "power2.inOut" }, T7);
+    tl.fromTo("#scene8", { filter: "blur(10px)", scale: 0.97, opacity: 0 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }, T7 + 0.1);
+
+    // ===== SCENE 8: Summary (45-50s) =====
+    var s8 = T7 + 0.6;
+    // Glow breath
+    tl.to("#s8-glow", { scale: 1.06, yoyo: true, repeat: 3, duration: 1.0, ease: "sine.inOut" }, T7 + 0.2);
+    // Tiles settle in
+    tl.fromTo("#s8t-1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.inOut" }, s8);
+    tl.fromTo("#s8t-2", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.inOut" }, s8 + 0.2);
+    tl.fromTo("#s8t-3", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.inOut" }, s8 + 0.4);
+    tl.fromTo("#s8t-4", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "sine.inOut" }, s8 + 0.6);
+    // Closing line writes on
+    tl.fromTo("#s8-closing", { clipPath: "inset(0 100% 0 0)", opacity: 0 }, { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: 0.8, ease: "power2.out" }, s8 + 0.8);
+    // FINAL SCENE: fade to black
+    tl.to("#scene8", { opacity: 0, duration: 1.5, ease: "power2.in" }, 48.5);
+    // Hard kill for scene8 (final scene exit)
+    tl.set("#scene8", { visibility: "hidden" }, 50);
+
+    window.__timelines["main"] = tl;
+  </script>
+</body>
+</html>

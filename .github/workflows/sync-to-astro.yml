@@ -17,6 +17,17 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate indexes
+        run: |
+          cd scripts
+          npm install
+          node build-index.js
+
       - name: Clone Astro repo
         run: |
           git clone https://x-access-token:${{ secrets.ASTRO_DEPLOY_TOKEN }}@github.com/ShallowDr1Am/myPoint.git astro-repo
@@ -24,23 +35,34 @@ jobs:
       - name: Sync markdown files and images
         run: |
           # Remove existing md and image files in Astro's content directory
-          rm -f astro-repo/src/content/notes/*.md
-          rm -f astro-repo/src/content/notes/*.gif astro-repo/src/content/notes/*.png astro-repo/src/content/notes/*.jpg astro-repo/src/content/notes/*.webp astro-repo/src/content/notes/*.svg
+          rm -rf astro-repo/src/content/notes/*
+          mkdir -p astro-repo/src/content/notes/{css,javascript,browser,go}
 
-          # Copy md files from Obsidian (exclude Excalidraw)
-          for f in *.md; do
-            [ -f "$f" ] && cp "$f" astro-repo/src/content/notes/
+          # Copy files from each category directory
+          for dir in css javascript browser go; do
+            if [ -d "$dir" ]; then
+              cp -r "$dir"/*.md astro-repo/src/content/notes/$dir/ 2>/dev/null || true
+            fi
           done
 
-          # Copy image files from Obsidian root
+          # Copy image files from demos and root
+          for dir in demos sse-demo browser-cache-frames browser-cache-video; do
+            if [ -d "$dir" ]; then
+              find "$dir" -type f \( -name "*.gif" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" -o -name "*.svg" \) -exec cp "{}" astro-repo/src/content/notes/ \;
+            fi
+          done
+
+          # Copy root-level images
           for ext in gif png jpg jpeg webp svg; do
             for f in *."$ext"; do
               [ -f "$f" ] && cp "$f" astro-repo/src/content/notes/
             done
           done
 
-          # Also copy files in subdirectories (excluding Excalidraw and hidden dirs)
-          find . -type f \( -name "*.md" -o -name "*.gif" -o -name "*.png" -o -name "*.jpg" -o -name "*.jpeg" -o -name "*.webp" -o -name "*.svg" \) -not -path "./.git/*" -not -path "./.obsidian/*" -not -path "./Excalidraw/*" -exec cp "{}" astro-repo/src/content/notes/ \;
+          # Copy index files for search and LLM
+          cp llms.txt astro-repo/public/
+          cp search-index.json astro-repo/public/
+          cp keywords.json astro-repo/public/
 
       - name: Commit and push to Astro repo
         run: |
