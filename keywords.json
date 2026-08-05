@@ -66,6 +66,7 @@
     "browser/浏览器缓存.md",
     "browser/跨域.md",
     "css/文档流.md",
+    "go/组合原则.md",
     "javascript/JS模块化 CommonJs和EsModule.md",
     "javascript/Set、Map以及.map和.foreach.md"
   ],
@@ -114,7 +115,8 @@
     "browser/SSE 流式文本解析.md",
     "browser/从输入URL的过程.md",
     "browser/跨域.md",
-    "sse-demo/README.md"
+    "sse-demo/README.md",
+    "go/go.mod与go.sum.md"
   ],
   "说明": [
     "browser/SSE 流式文本解析.md",
@@ -122,6 +124,7 @@
     "browser/浏览器缓存.md",
     "browser/跨域.md",
     "sse-demo/README.md",
+    "go/go.mod与go.sum.md",
     "javascript/Generator Async.md",
     "javascript/JS模块化 CommonJs和EsModule.md"
   ],
@@ -198,7 +201,8 @@
   ],
   "使用示例": [
     "browser/SSE 流式文本解析.md",
-    "browser/跨域.md"
+    "browser/跨域.md",
+    "go/组合原则.md"
   ],
   "实际应用场景": [
     "browser/SSE 流式文本解析.md"
@@ -266,7 +270,8 @@
     "browser/SSE 流式文本解析.md"
   ],
   "关键点": [
-    "browser/SSE 流式文本解析.md"
+    "browser/SSE 流式文本解析.md",
+    "go/组合原则.md"
   ],
   "限制是": [
     "browser/SSE 流式文本解析.md"
@@ -372,6 +377,7 @@
     "browser/事件循环 - long task问题.md",
     "browser/浏览器缓存.md",
     "browser/跨域.md",
+    "go/go.mod与go.sum.md",
     "javascript/JS模块化 CommonJs和EsModule.md"
   ],
   "场景": [
@@ -737,7 +743,8 @@
   ],
   "问题": [
     "browser/事件循环 - long task问题.md",
-    "browser/浏览器的进程与线程.md"
+    "browser/浏览器的进程与线程.md",
+    "go/go.mod与go.sum.md"
   ],
   "事件和": [
     "browser/事件循环 - long task问题.md"
@@ -749,7 +756,8 @@
     "browser/事件循环 - long task问题.md"
   ],
   "答案": [
-    "browser/事件循环 - long task问题.md"
+    "browser/事件循环 - long task问题.md",
+    "go/go.mod与go.sum.md"
   ],
   "不固定": [
     "browser/事件循环 - long task问题.md"
@@ -1298,7 +1306,8 @@
     "browser/从输入URL的过程.md"
   ],
   "编码": [
-    "browser/从输入URL的过程.md"
+    "browser/从输入URL的过程.md",
+    "go/go.mod与go.sum.md"
   ],
   "只能包含": [
     "browser/从输入URL的过程.md"
@@ -1352,7 +1361,8 @@
     "browser/从输入URL的过程.md"
   ],
   "文件": [
-    "browser/从输入URL的过程.md"
+    "browser/从输入URL的过程.md",
+    "go/go.mod与go.sum.md"
   ],
   "本地": [
     "browser/从输入URL的过程.md"
@@ -2076,6 +2086,7 @@
   ],
   "通过": [
     "browser/浏览器标签通信.md",
+    "go/组合原则.md",
     "javascript/Set、Map以及.map和.foreach.md"
   ],
   "等获取": [
@@ -4310,6 +4321,215 @@
   "详细理论请查看": [
     "sse-demo/README.md"
   ],
+  "go": [
+    "go/go.mod与go.sum.md",
+    "go/组合原则.md"
+  ],
+  "mod": [
+    "go/go.mod与go.sum.md"
+  ],
+  "sum": [
+    "go/go.mod与go.sum.md"
+  ],
+  "sha-256": [
+    "go/go.mod与go.sum.md"
+  ],
+  "base64": [
+    "go/go.mod与go.sum.md"
+  ],
+  "import": [
+    "go/go.mod与go.sum.md"
+  ],
+  "git": [
+    "go/go.mod与go.sum.md"
+  ],
+  "依赖管理": [
+    "go/go.mod与go.sum.md"
+  ],
+  "依赖关系": [
+    "go/go.mod与go.sum.md"
+  ],
+  "版本校验": [
+    "go/go.mod与go.sum.md"
+  ],
+  "每行格式": [
+    "go/go.mod与go.sum.md"
+  ],
+  "模块路径": [
+    "go/go.mod与go.sum.md"
+  ],
+  "版本": [
+    "go/go.mod与go.sum.md"
+  ],
+  "类型": [
+    "go/go.mod与go.sum.md"
+  ],
+  "代码校验和": [
+    "go/go.mod与go.sum.md"
+  ],
+  "校验和": [
+    "go/go.mod与go.sum.md"
+  ],
+  "哈希值": [
+    "go/go.mod与go.sum.md"
+  ],
+  "两者关系": [
+    "go/go.mod与go.sum.md"
+  ],
+  "记录什么": [
+    "go/go.mod与go.sum.md"
+  ],
+  "用途": [
+    "go/go.mod与go.sum.md"
+  ],
+  "依赖": [
+    "go/go.mod与go.sum.md"
+  ],
+  "声明需要哪些包": [
+    "go/go.mod与go.sum.md"
+  ],
+  "验证下载的包是否被篡改": [
+    "go/go.mod与go.sum.md"
+  ],
+  "验证流程": [
+    "go/go.mod与go.sum.md"
+  ],
+  "机制": [
+    "go/go.mod与go.sum.md"
+  ],
+  "编译时静态导入": [
+    "go/go.mod与go.sum.md"
+  ],
+  "不是运行时动态导入": [
+    "go/go.mod与go.sum.md"
+  ],
+  "是动态的吗": [
+    "go/go.mod与go.sum.md"
+  ],
+  "是静态编译": [
+    "go/go.mod与go.sum.md"
+  ],
+  "什么时候拉取远端": [
+    "go/go.mod与go.sum.md"
+  ],
+  "时拉取并缓存": [
+    "go/go.mod与go.sum.md"
+  ],
+  "运行时需要网络吗": [
+    "go/go.mod与go.sum.md"
+  ],
+  "不需要": [
+    "go/go.mod与go.sum.md"
+  ],
+  "依赖已编译进二进制": [
+    "go/go.mod与go.sum.md"
+  ],
+  "常用命令": [
+    "go/go.mod与go.sum.md"
+  ],
+  "命令": [
+    "go/go.mod与go.sum.md",
+    "javascript/Generator Async.md"
+  ],
+  "作用": [
+    "go/go.mod与go.sum.md"
+  ],
+  "初始化模块": [
+    "go/go.mod与go.sum.md"
+  ],
+  "整理依赖": [
+    "go/go.mod与go.sum.md"
+  ],
+  "添加缺失": [
+    "go/go.mod与go.sum.md"
+  ],
+  "移除无用": [
+    "go/go.mod与go.sum.md"
+  ],
+  "下载依赖到缓存": [
+    "go/go.mod与go.sum.md"
+  ],
+  "查看所有依赖": [
+    "go/go.mod与go.sum.md"
+  ],
+  "声明依赖清单": [
+    "go/go.mod与go.sum.md"
+  ],
+  "直接": [
+    "go/go.mod与go.sum.md"
+  ],
+  "间接": [
+    "go/go.mod与go.sum.md"
+  ],
+  "锁定依赖完整性": [
+    "go/go.mod与go.sum.md"
+  ],
+  "防篡改": [
+    "go/go.mod与go.sum.md"
+  ],
+  "两者都应提交到": [
+    "go/go.mod与go.sum.md"
+  ],
+  "确保团队依赖一致": [
+    "go/go.mod与go.sum.md"
+  ],
+  "has-a": [
+    "go/组合原则.md"
+  ],
+  "is-a": [
+    "go/组合原则.md"
+  ],
+  "组合原则": [
+    "go/组合原则.md"
+  ],
+  "没有继承": [
+    "go/组合原则.md"
+  ],
+  "结构体嵌入": [
+    "go/组合原则.md"
+  ],
+  "接口组合": [
+    "go/组合原则.md"
+  ],
+  "实现代码复用": [
+    "go/组合原则.md"
+  ],
+  "核心语法": [
+    "go/组合原则.md"
+  ],
+  "组合": [
+    "go/组合原则.md"
+  ],
+  "继承": [
+    "go/组合原则.md"
+  ],
+  "关系": [
+    "go/组合原则.md"
+  ],
+  "灵活组装": [
+    "go/组合原则.md"
+  ],
+  "层级固定": [
+    "go/组合原则.md"
+  ],
+  "避免深层嵌套": [
+    "go/组合原则.md"
+  ],
+  "容易产生复杂继承链": [
+    "go/组合原则.md"
+  ],
+  "嵌入结构体的方法会被自动提升": [
+    "go/组合原则.md"
+  ],
+  "可覆盖嵌入结构体的方法": [
+    "go/组合原则.md"
+  ],
+  "接口也可组合": [
+    "go/组合原则.md"
+  ],
+  "小接口组合成大接口": [
+    "go/组合原则.md"
+  ],
   "generator": [
     "javascript/Generator Async.md"
   ],
@@ -4444,9 +4664,6 @@
     "javascript/Generator Async.md"
   ],
   "使用全局的": [
-    "javascript/Generator Async.md"
-  ],
-  "命令": [
     "javascript/Generator Async.md"
   ],
   "当内部部署了": [

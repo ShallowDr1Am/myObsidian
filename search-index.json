@@ -4682,6 +4682,217 @@
       "lastModified": "2026-05-18T06:37:20.856Z"
     },
     {
+      "file": "go/go.mod与go.sum.md",
+      "category": "go",
+      "title": "go.mod 与 go.sum",
+      "titles": [
+        {
+          "level": 1,
+          "text": "go.mod 与 go.sum"
+        },
+        {
+          "level": 2,
+          "text": "go.mod 依赖管理"
+        },
+        {
+          "level": 2,
+          "text": "go.sum 版本校验"
+        },
+        {
+          "level": 2,
+          "text": "两者关系"
+        },
+        {
+          "level": 2,
+          "text": "import 机制"
+        },
+        {
+          "level": 2,
+          "text": "常用命令"
+        },
+        {
+          "level": 2,
+          "text": "总结"
+        }
+      ],
+      "keywords": [
+        "go",
+        "mod",
+        "go",
+        "sum",
+        "go",
+        "mod",
+        "go",
+        "sum",
+        "go",
+        "mod",
+        "sha-256",
+        "base64",
+        "import",
+        "go",
+        "import",
+        "go",
+        "go",
+        "mod",
+        "go",
+        "sum",
+        "git",
+        "依赖管理",
+        "依赖关系",
+        "版本校验",
+        "每行格式",
+        "字段",
+        "说明",
+        "模块路径",
+        "版本",
+        "类型",
+        "代码校验和",
+        "校验和",
+        "哈希值",
+        "校验和",
+        "编码",
+        "两者关系",
+        "文件",
+        "记录什么",
+        "用途",
+        "依赖",
+        "版本",
+        "声明需要哪些包",
+        "校验和",
+        "验证下载的包是否被篡改",
+        "验证流程",
+        "机制",
+        "编译时静态导入",
+        "不是运行时动态导入",
+        "问题",
+        "答案",
+        "是动态的吗",
+        "是静态编译",
+        "什么时候拉取远端",
+        "时拉取并缓存",
+        "运行时需要网络吗",
+        "不需要",
+        "依赖已编译进二进制",
+        "常用命令",
+        "命令",
+        "作用",
+        "初始化模块",
+        "整理依赖",
+        "添加缺失",
+        "移除无用",
+        "下载依赖到缓存",
+        "查看所有依赖",
+        "总结",
+        "声明依赖清单",
+        "直接",
+        "间接",
+        "锁定依赖完整性",
+        "防篡改",
+        "两者都应提交到",
+        "确保团队依赖一致"
+      ],
+      "codeBlocks": [
+        {
+          "language": "go",
+          "code": "module hellomodule      // 模块名\n\ngo 1.26.4               // Go 版本\n\nrequire (               // 直接依赖\n    github.com/valyala/fasthttp v1.71.0\n    go.uber.org/zap v1.28.0\n)\n\nrequire (               // 间接依赖"
+        },
+        {
+          "language": "text",
+          "code": "hellomodule\n├── fasthttp v1.71.0\n│   ├── brotli v1.2.1      (indirect)\n│   ├── compress v1.18.6   (indirect)\n│   └── bytebufferpool v1.0.0 (indirect)\n└── zap v1.28.0\n    └── multierr v1.10.0   (indire"
+        },
+        {
+          "language": "text",
+          "code": "github.com/valyala/fasthttp v1.71.0 h1:tepR7H+Guh9VUqxxcPggYi8R3lGUu2Rsdh+z7/FCY3k=\ngithub.com/valyala/fasthttp v1.71.0/go.mod h1:z1sDUvOShhXq/C9mwH/fSm1Vb71tUJwmQdgkBrBNwnA="
+        },
+        {
+          "language": "text",
+          "code": "go build\n    ↓\n下载依赖到 $GOPATH/pkg/mod\n    ↓\n计算下载文件的 SHA-256\n    ↓\n对比 go.sum 中的校验和\n    ↓\n不一致 → 报错退出\n一致 → 继续编译"
+        }
+      ],
+      "summary": "依赖关系： --- 每行格式： | 字段 | 说明 | |------|------| | 模块路径 | github.com/valyala/fasthttp | | 版本 | v1.71.0 | | 类型 | h1 = 代码校验和，/go.mod = go.mod 校验和 | | 哈希值 | SHA-256 校验和（base64 编码） | --- | 文件 | 记录什么 | 用途 | |--...",
+      "wordCount": 1690,
+      "lastModified": "2026-06-17T11:41:37.052Z"
+    },
+    {
+      "file": "go/组合原则.md",
+      "category": "go",
+      "title": "Go 组合原则",
+      "titles": [
+        {
+          "level": 1,
+          "text": "Go 组合原则"
+        },
+        {
+          "level": 2,
+          "text": "核心语法"
+        },
+        {
+          "level": 2,
+          "text": "使用示例"
+        },
+        {
+          "level": 2,
+          "text": "接口组合"
+        },
+        {
+          "level": 2,
+          "text": "组合 vs 继承"
+        },
+        {
+          "level": 2,
+          "text": "关键点"
+        }
+      ],
+      "keywords": [
+        "go",
+        "go",
+        "vs",
+        "has-a",
+        "is-a",
+        "组合原则",
+        "没有继承",
+        "通过",
+        "结构体嵌入",
+        "接口组合",
+        "实现代码复用",
+        "核心语法",
+        "使用示例",
+        "接口组合",
+        "组合",
+        "继承",
+        "组合",
+        "继承",
+        "关系",
+        "关系",
+        "灵活组装",
+        "层级固定",
+        "避免深层嵌套",
+        "容易产生复杂继承链",
+        "关键点",
+        "嵌入结构体的方法会被自动提升",
+        "可覆盖嵌入结构体的方法",
+        "接口也可组合",
+        "小接口组合成大接口"
+      ],
+      "codeBlocks": [
+        {
+          "language": "go",
+          "code": "// 定义结构体\ntype Animal struct {\n    Name string\n}\n\n// 定义可嵌入的能力\ntype Swimmer struct{}\n\nfunc (s Swimmer) Swim() { fmt.Println(\"游泳\") }\n\n// 组合：嵌入多个结构体\ntype Duck struct {\n    Animal   // 嵌入基础结构体\n    Swimmer "
+        },
+        {
+          "language": "go",
+          "code": "duck := Duck{Animal: Animal{Name: \"鸭子\"}}\nduck.Eat()  // 调用 Animal 的方法\nduck.Swim() // 调用 Swimmer 的方法"
+        },
+        {
+          "language": "go",
+          "code": "type Reader interface { Read() }\ntype Writer interface { Write() }\n\n// 组合接口\ntype ReadWriter interface {\n    Reader\n    Writer\n}"
+        }
+      ],
+      "summary": "Go 没有继承，通过结构体嵌入和接口组合实现代码复用。 | 组合 | 继承 | |------|------| | has-a 关系 | is-a 关系 | | 灵活组装 | 层级固定 | | 避免深层嵌套 | 容易产生复杂继承链 | - 嵌入结构体的方法会被自动提升 - 可覆盖嵌入结构体的方法 - 接口也可组合，小接口组合成大接口",
+      "wordCount": 709,
+      "lastModified": "2026-06-17T07:39:49.581Z"
+    },
+    {
       "file": "javascript/Generator Async.md",
       "category": "javascript",
       "title": "Generator 与 Async",
@@ -5930,6 +6141,10 @@
       {
         "file": "browser/跨域.md",
         "weight": 1
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
       }
     ],
     "解析器实现": [
@@ -5957,6 +6172,10 @@
       },
       {
         "file": "browser/SSE 流式文本解析.md",
+        "weight": 11
+      },
+      {
+        "file": "go/组合原则.md",
         "weight": 11
       }
     ],
@@ -6164,6 +6383,10 @@
         "weight": 11
       },
       {
+        "file": "go/组合原则.md",
+        "weight": 11
+      },
+      {
         "file": "javascript/JS模块化 CommonJs和EsModule.md",
         "weight": 11
       }
@@ -6235,6 +6458,10 @@
       },
       {
         "file": "browser/跨域.md",
+        "weight": 11
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
         "weight": 11
       },
       {
@@ -6383,6 +6610,10 @@
       },
       {
         "file": "sse-demo/README.md",
+        "weight": 1
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
         "weight": 1
       },
       {
@@ -6539,6 +6770,10 @@
       }
     ],
     "关键点": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 11
+      },
       {
         "file": "browser/SSE 流式文本解析.md",
         "weight": 1
@@ -7668,6 +7903,10 @@
       {
         "file": "browser/浏览器的进程与线程.md",
         "weight": 1
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
       }
     ],
     "事件和": [
@@ -7692,6 +7931,10 @@
       {
         "file": "browser/事件循环 - long task问题.md",
         "weight": 2
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
       }
     ],
     "不固定": [
@@ -8350,6 +8593,10 @@
       {
         "file": "browser/从输入URL的过程.md",
         "weight": 12
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
       }
     ],
     "dns": [
@@ -9016,6 +9263,10 @@
       {
         "file": "browser/从输入URL的过程.md",
         "weight": 3
+      },
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
       }
     ],
     "本地": [
@@ -10357,6 +10608,10 @@
     "通过": [
       {
         "file": "browser/浏览器标签通信.md",
+        "weight": 1
+      },
+      {
+        "file": "go/组合原则.md",
         "weight": 1
       },
       {
@@ -14910,6 +15165,428 @@
         "weight": 1
       }
     ],
+    "go": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 49
+      },
+      {
+        "file": "go/组合原则.md",
+        "weight": 12
+      }
+    ],
+    "mod": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 24
+      }
+    ],
+    "sum": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 23
+      }
+    ],
+    "依赖管理": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 11
+      }
+    ],
+    "版本校验": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 11
+      }
+    ],
+    "两者关系": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 11
+      }
+    ],
+    "import": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 12
+      }
+    ],
+    "机制": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 11
+      }
+    ],
+    "常用命令": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 11
+      }
+    ],
+    "sha-256": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "base64": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "git": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "依赖关系": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "每行格式": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "模块路径": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "版本": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 2
+      }
+    ],
+    "类型": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "代码校验和": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "校验和": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 3
+      }
+    ],
+    "哈希值": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "记录什么": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "用途": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "依赖": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "声明需要哪些包": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "验证下载的包是否被篡改": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "验证流程": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "编译时静态导入": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "不是运行时动态导入": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "是动态的吗": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "是静态编译": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "什么时候拉取远端": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "时拉取并缓存": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "运行时需要网络吗": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "不需要": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "依赖已编译进二进制": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "命令": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      },
+      {
+        "file": "javascript/Generator Async.md",
+        "weight": 1
+      }
+    ],
+    "作用": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "初始化模块": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "整理依赖": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "添加缺失": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "移除无用": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "下载依赖到缓存": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "查看所有依赖": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "声明依赖清单": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "直接": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "间接": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "锁定依赖完整性": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "防篡改": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "两者都应提交到": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "确保团队依赖一致": [
+      {
+        "file": "go/go.mod与go.sum.md",
+        "weight": 1
+      }
+    ],
+    "组合原则": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 11
+      }
+    ],
+    "核心语法": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 11
+      }
+    ],
+    "接口组合": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 12
+      }
+    ],
+    "组合": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 12
+      }
+    ],
+    "继承": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 12
+      }
+    ],
+    "has-a": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "is-a": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "没有继承": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "结构体嵌入": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "实现代码复用": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "关系": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 2
+      }
+    ],
+    "灵活组装": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "层级固定": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "避免深层嵌套": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "容易产生复杂继承链": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "嵌入结构体的方法会被自动提升": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "可覆盖嵌入结构体的方法": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "接口也可组合": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
+    "小接口组合成大接口": [
+      {
+        "file": "go/组合原则.md",
+        "weight": 1
+      }
+    ],
     "generator": [
       {
         "file": "javascript/Generator Async.md",
@@ -15231,12 +15908,6 @@
       }
     ],
     "使用全局的": [
-      {
-        "file": "javascript/Generator Async.md",
-        "weight": 1
-      }
-    ],
-    "命令": [
       {
         "file": "javascript/Generator Async.md",
         "weight": 1
