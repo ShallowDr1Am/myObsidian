@@ -241,6 +241,7 @@ proxy     = 序列化层             — 把内部对象转成对外 contract
 ✅ State + Node + Edge 基本结构
 ✅ agent → should_continue ⇄ tools 循环 Agent
 ✅ 子图 + router_proxy 模块化编排
+✅ Send 扇出（Map-Reduce 并行 → [[LangGraph — Send 扇出]]）
 🔄 Checkpointer（图状态持久化 → [[LangGraph — Checkpointer 检查点]]）
 ⬜ Human-in-the-loop（执行前人工确认）
 ⬜ 并行分支（多子图同时跑）

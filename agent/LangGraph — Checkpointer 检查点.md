@@ -29,12 +29,23 @@
 
 **Checkpointer 是 LangGraph 框架层面的基础设施，LLM 对此无感知。** LLM 每次请求都是无状态的，Agent 通过 Checkpointer 保存/恢复消息列表，在每次调用时把全量历史重新发给 LLM。
 
-### 1.2 两种实现
+### 1.2 三种实现 + 选型
 
-| 实现 | 存储位置 | 场景 |
-|---|---|---|
-| `InMemorySaver` | 内存 | 开发测试 |
-| `PostgresSaver` | PostgreSQL 数据库 | 生产环境 |
+| 后端 | 特点 | 一句话总结 | 代码示例 |
+|---|---|---|---|
+| `MemorySaver` | 内存存储，极快，无需依赖，重启即丢 | 仅适合本地开发测试 / 单元测试 | `checkpointer=MemorySaver()` |
+| `SqliteSaver` | 磁盘文件持久化，轻量级，无需额外服务 | 适合小体量 Demo、个人工具、边缘设备 | `checkpointer=SqliteSaver.from_conn_string("sqlite.db")` |
+| `PostgresSaver` | 数据库持久化，支持高并发、分布式、备份 | 企业级生产标配，可靠性和扩展性最佳 | `checkpointer=PostgresSaver.from_conn_string(DB_URL)` |
+
+**选型决策：看两点 —— 是否需要持久化（重启不丢）、是否需要多进程共享（并发/分布式）。**
+
+```
+需要持久化？
+├─ 否 → MemorySaver（开发测试）
+└─ 是 → 需要多进程共享 / 高并发？
+        ├─ 否 → SqliteSaver（个人工具、边缘设备）
+        └─ 是 → PostgresSaver（企业生产）
+```
 
 ### 1.3 最小接入方式
 
