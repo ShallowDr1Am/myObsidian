@@ -26,13 +26,7 @@ class WeatherInput(BaseModel):   # 继承 BaseModel
 
 Python 的数据校验库，相当于 JS 的 **Zod**。Python 的 type hint（`def foo(x: str)`）只是注释不校验，Pydantic 在运行时真的会检查类型。
 
-```python
-from pydantic import BaseModel, Field
-
-class WeatherInput(BaseModel):
-    loc: str = Field(description="城市英文名")
-    limit: int = Field(default=10, ge=1, le=100)
-```
+👉 语法、校验能力、嵌套模型见 [[Pydantic 速查]]（单一来源），本节只留 JS 类比。
 
 ## 列表推导式（List Comprehension）
 
@@ -71,6 +65,8 @@ chain = prompt | model | parser
 **JS 无法实现这一点** — JS 不允许操作符重载，`|` 永远是位运算。所以 JS 生态只能用 `pipe()`/`compose()` 函数调用语法，没有这种"运算符即管道"的写法。
 
 前一个的输出自动成为后一个的输入，数据从左流到右，类似 Unix 管道（`cat | grep | wc`）。条件是前后两个 Runnable 的输入输出类型能对上。
+
+👉 组合规则、六种模式对比与 `|` 语法糖的边界见 [[LCEL — LangChain Expression Language]]；本节只讲 Python 操作符重载机制。
 
 ## 三元表达式 — 值在中间，条件在右边
 
